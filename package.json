@@ -1,0 +1,80 @@
+{
+  "name": "appropriate-images",
+  "version": "0.1.0",
+  "description": "Get appropriately sized images into your website.",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --single-quote --write '{{bin,conf,lib,src,test}/**/*.js, index.js}'",
+    "lint": "eslint .",
+    "jest": "jest",
+    "pretest": "npm run lint",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapbox/appropriate-images.git"
+  },
+  "keywords": [
+    "images",
+    "responsive",
+    "responsive-images",
+    "resize",
+    "react"
+  ],
+  "author": "Mapbox",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mapbox/appropriate-images/issues"
+  },
+  "homepage": "https://github.com/mapbox/appropriate-images#readme",
+  "engines": {
+    "node": ">=4"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "del": "^3.0.0",
+    "fasterror": "^1.1.0",
+    "imagemin": "^5.3.1",
+    "imagemin-mozjpeg": "^6.0.0",
+    "imagemin-pngquant": "^5.0.1",
+    "imagemin-webp": "^4.0.0",
+    "lodash": "^4.17.4",
+    "meow": "^3.7.0",
+    "mkdirp": "^0.5.1",
+    "p-finally": "^1.0.0",
+    "pify": "^3.0.0",
+    "sharp": "^0.18.1",
+    "tempy": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.0.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-prettier": "^2.1.1",
+    "husky": "^0.13.4",
+    "jest": "^20.0.4",
+    "lint-staged": "^3.6.1",
+    "prettier": "^1.4.4"
+  },
+  "lint-staged": {
+    "{{bin,conf,lib,src,test}/**/*.js, index.js}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "html"
+    ],
+    "resetMocks": true,
+    "roots": [
+      "./test"
+    ],
+    "testRegex": ".*\\.test\\.js$"
+  }
+}
