@@ -1,8 +1,12 @@
 # @mapbox/appropriate-images
 
+[![Build Status](https://travis-ci.org/mapbox/appropriate-images.svg?branch=master)](https://travis-ci.org/mapbox/appropriate-images)
+
 🚧🚧 **EXPERIMENTAL! WORK IN PROGRESS!** 🚧🚧
 
 Generate appropriately resized and optimized images into your website, using a configuration that can be shared with client-side libraries.
+
+Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
 
 ## API
 
