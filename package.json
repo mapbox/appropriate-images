@@ -4,6 +4,7 @@
   "description": "Get appropriately sized images into your website.",
   "main": "index.js",
   "scripts": {
+    "precommit": "lint-staged",
     "format": "prettier --single-quote --write '{,bin/,lib/,test/}**/*.js'",
     "lint": "eslint .",
     "test-jest": "jest",
