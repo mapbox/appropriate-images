@@ -4,14 +4,15 @@ const fs = require('fs');
 const pify = require('pify');
 const del = require('del');
 const path = require('path');
+const tempy = require('tempy');
 const generate = require('../lib/generate').generate;
 
 describe('generate', () => {
   const inputDirectory = path.join(__dirname, './fixtures');
-  const outputDirectory = path.join(__dirname, './output');
+  const outputDirectory = tempy.directory();
 
   afterEach(() => {
-    return del(path.join(outputDirectory, '*.*'));
+    return del(path.join(outputDirectory, '*.*'), { force: true });
   });
 
   test('works', () => {

@@ -4,9 +4,9 @@
   "description": "Get appropriately sized images into your website.",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --single-quote --write '{{bin,conf,lib,src,test}/**/*.js, index.js}'",
+    "format": "prettier --single-quote --write '{,bin/,lib/,test/}**/*.js'",
     "lint": "eslint .",
-    "jest": "jest",
+    "test-jest": "jest",
     "pretest": "npm run lint",
     "test": "jest"
   },
@@ -59,7 +59,7 @@
     "prettier": "^1.4.4"
   },
   "lint-staged": {
-    "{{bin,conf,lib,src,test}/**/*.js, index.js}": [
+    "{,bin/,lib/,test/}**/*.js": [
       "prettier --single-quote --write",
       "git add"
     ]
