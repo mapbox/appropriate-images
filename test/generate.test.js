@@ -5,7 +5,7 @@ const pify = require('pify');
 const del = require('del');
 const path = require('path');
 const tempy = require('tempy');
-const generate = require('../lib/generate').generate;
+const generate = require('../lib/generate');
 
 describe('generate', () => {
   const inputDirectory = path.join(__dirname, './fixtures');
@@ -43,9 +43,7 @@ describe('generate', () => {
     const options = { inputDirectory, outputDirectory };
 
     return generate(imageConfig, options)
-      .then(() => {
-        return pify(fs.readdir)(outputDirectory);
-      })
+      .then(() => pify(fs.readdir)(outputDirectory))
       .then(outputFiles => {
         expect(outputFiles).toEqual([
           'bear-300.png',
@@ -64,6 +62,51 @@ describe('generate', () => {
           'osprey-300x300.webp',
           'osprey-600.jpg',
           'osprey-600.webp',
+          'walrus-400.png',
+          'walrus-400.webp'
+        ]);
+      });
+  });
+
+  test('works with specified ids', () => {
+    const imageConfig = {
+      bear: {
+        basename: 'bear.png',
+        sizes: [{ width: 300 }, { width: 600 }]
+      },
+      montaraz: {
+        basename: 'montaraz.jpg',
+        sizes: [
+          { width: 300, height: 500 },
+          { width: 1200, crop: 'north' },
+          { width: 200, height: 200, crop: 'southeast' },
+          { width: 210, height: 210, crop: 'northwest' }
+        ]
+      },
+      osprey: {
+        basename: 'osprey.jpg',
+        sizes: [{ width: 600 }, { width: 300, height: 300 }]
+      },
+      walrus: {
+        basename: 'walrus.png',
+        sizes: [{ width: 400 }]
+      }
+    };
+
+    const options = {
+      ids: ['bear', 'walrus'],
+      inputDirectory,
+      outputDirectory
+    };
+
+    return generate(imageConfig, options)
+      .then(() => pify(fs.readdir)(outputDirectory))
+      .then(outputFiles => {
+        expect(outputFiles).toEqual([
+          'bear-300.png',
+          'bear-300.webp',
+          'bear-600.png',
+          'bear-600.webp',
           'walrus-400.png',
           'walrus-400.webp'
         ]);

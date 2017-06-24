@@ -6,16 +6,12 @@
     "es6": true
   },
   "plugins": [
-    "node",
-    "prettier"
+    "node"
   ],
   "rules": {
-    "strict": ["error"],
+    "strict": ["error", "global"],
     "no-console": ["off"],
-
     "node/no-unsupported-features": ["error", {"version": 4}],
-    "node/no-missing-require": "error",
-
-    "prettier/prettier": ["error", { "singleQuote": true }]
+    "node/no-missing-require": "error"
   }
 }
