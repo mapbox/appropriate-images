@@ -132,9 +132,9 @@ The returned URL will account for
 
 - the available width,
 - the resolution of the screen, and
-- whether or not the browser supports WebP.
+- whether or not the browser supports `webp`.
 
-The image variant that is selected with be **the narrowest variant that is still at least as wide as the available width, or the widest variant if the available width exceeds all sizes**.
+The image variant that is selected will be **the narrowest variant that is at least as wide as the available width, or else, if the available width exceeds all sizes, the widest variant**.
 
 If you created your image variants with [`generate`], the URLs this function returns should match the paths to resized, optimized images.
 
@@ -167,7 +167,7 @@ const imageConfig = {
     basename: 'montaraz.jpg',
     sizes: [
       { width: 600, height: 500 },
-      { width: 1200, crop: 'north' },
+      { width: 1200, height: 800, crop: 'north' },
       { width: 200, height: 200, crop: 'southeast' },
     ]
   }
@@ -190,7 +190,7 @@ getAppropriateImageUrl({
   imageDirectory: 'img/optimized/'
 });
 // On a regular-resolution screen: img/optimized/montaraz-600x500.jpg or webp
-// On a high-resolution screen: img/optimized/montaraz-1200.jpg or webp
+// On a high-resolution screen: img/optimized/montaraz-1200x800.jpg or webp
 ```
 
 ## Image configuration
@@ -198,26 +198,32 @@ getAppropriateImageUrl({
 The image configuration is an object. For every property:
 
 - The key represents the image's `id`.
-  The `ids` option for [`generate`], and the id arguments for a CLI you created with [`createCli`], correspond to these keys.
+  This image id is used by all of the fucntions above,
 - The value is an object configuring the resizing of that image.
 
-Each image's configuration object includes the following properties:
+Each image's configuration object includes the following:
 
 ### `basename`
+
+`string`
 
 The path from `options.inputDirectory` to the image (including the image's extension).
 
 ### `sizes`
 
+`Array<Object>`
+
 An array of objects representing sizes. Each size *must* include a `width`, and can optionally include other properties.
 
-- **width** `number` (required) - A width at which that image should be generated.
+- **width** `number` (required) - A width for the generated image.
 - **height** `?number` - The height for the generated image.
-  If no `height` is provided, the `width` is used and image's aspect ratio is preserved.
+  If no `height` is provided, the `width` is used and the image's aspect ratio is preserved.
   If a `height` *is* provided and it does not fit the image's aspect ratio, the image will be cropped.
-- **crop** `?string` - Default: `'center'`. [A valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-resize/#crop), designating the manner in which the image will be cropped if both `width` and `height` are provided: `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`, `center`, `centre`, `entropy`, and `attention`.
+- **crop** `?string` - Default: `'center'`.
+  Defines the manner in which the image will be cropped if both `width` and `height` are provided.
+  Must be [a valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-resize/#crop): `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`, `center`, `centre`, `entropy`, and `attention`.
 
 [`generate`]: #generate
 [`createCli`]: #createcli
-[image configuration]: #imageconfiguration
+[image configuration]: #image-configuration
 [`basename`]: #basename
