@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "lint-staged",
-    "format": "prettier --single-quote --write '{,bin/,lib/,test/}**/*.js'",
+    "format": "prettier --single-quote --write '{,lib/**,browser/**,test/**}*.js'",
     "lint": "eslint .",
     "test-jest": "jest",
     "pretest": "npm run lint",
@@ -59,7 +59,7 @@
     "prettier": "^1.4.4"
   },
   "lint-staged": {
-    "{,bin/,lib/,test/}**/*.js": [
+    "{,lib/**,browser/**,test/**}*.js": [
       "prettier --single-quote --write",
       "git add"
     ]

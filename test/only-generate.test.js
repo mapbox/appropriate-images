@@ -16,7 +16,7 @@ jest.mock('sharp', () => {
   const resizers = {};
   const croppers = {};
   const writers = {};
-  const m = jest.fn((filename) => {
+  const m = jest.fn(filename => {
     const s = {};
     s.resize = jest.fn(() => s);
     s.crop = jest.fn(() => s);
@@ -129,8 +129,12 @@ describe('generate only', () => {
       expect(sharp.resizers[bear]).toHaveBeenCalledWith(600, undefined);
       expect(sharp.croppers[bear]).toHaveBeenCalledTimes(0);
       expect(sharp.writers[bear]).toHaveBeenCalledTimes(2);
-      expect(sharp.writers[bear]).toHaveBeenCalledWith(expect.stringMatching(/bear-300\.png$/));
-      expect(sharp.writers[bear]).toHaveBeenCalledWith(expect.stringMatching(/bear-600\.png$/));
+      expect(sharp.writers[bear]).toHaveBeenCalledWith(
+        expect.stringMatching(/bear-300\.png$/)
+      );
+      expect(sharp.writers[bear]).toHaveBeenCalledWith(
+        expect.stringMatching(/bear-600\.png$/)
+      );
 
       const montaraz = path.join(inputDirectory, 'montaraz.jpg');
       expect(sharp).toHaveBeenCalledWith(montaraz);
@@ -140,14 +144,28 @@ describe('generate only', () => {
       expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(200, 200);
       expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(210, 210);
       expect(sharp.croppers[montaraz]).toHaveBeenCalledTimes(3);
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(sharp.gravity.north);
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(sharp.gravity.southeast);
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(sharp.strategy.entropy);
+      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+        sharp.gravity.north
+      );
+      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+        sharp.gravity.southeast
+      );
+      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+        sharp.strategy.entropy
+      );
       expect(sharp.writers[montaraz]).toHaveBeenCalledTimes(4);
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(expect.stringMatching(/montaraz-300x500\.jpg$/));
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(expect.stringMatching(/montaraz-1200\.jpg$/));
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(expect.stringMatching(/montaraz-200x200\.jpg$/));
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(expect.stringMatching(/montaraz-210x210\.jpg$/));
+      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+        expect.stringMatching(/montaraz-300x500\.jpg$/)
+      );
+      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+        expect.stringMatching(/montaraz-1200\.jpg$/)
+      );
+      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+        expect.stringMatching(/montaraz-200x200\.jpg$/)
+      );
+      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+        expect.stringMatching(/montaraz-210x210\.jpg$/)
+      );
 
       const osprey = path.join(inputDirectory, 'osprey.jpg');
       expect(sharp).toHaveBeenCalledWith(osprey);
@@ -156,8 +174,12 @@ describe('generate only', () => {
       expect(sharp.resizers[osprey]).toHaveBeenCalledWith(300, 300);
       expect(sharp.croppers[osprey]).toHaveBeenCalledTimes(0);
       expect(sharp.writers[osprey]).toHaveBeenCalledTimes(2);
-      expect(sharp.writers[osprey]).toHaveBeenCalledWith(expect.stringMatching(/osprey-600\.jpg$/));
-      expect(sharp.writers[osprey]).toHaveBeenCalledWith(expect.stringMatching(/osprey-300x300\.jpg$/));
+      expect(sharp.writers[osprey]).toHaveBeenCalledWith(
+        expect.stringMatching(/osprey-600\.jpg$/)
+      );
+      expect(sharp.writers[osprey]).toHaveBeenCalledWith(
+        expect.stringMatching(/osprey-300x300\.jpg$/)
+      );
 
       const walrus = path.join(inputDirectory, 'walrus.png');
       expect(sharp).toHaveBeenCalledWith(walrus);
@@ -165,33 +187,44 @@ describe('generate only', () => {
       expect(sharp.resizers[walrus]).toHaveBeenCalledWith(400, undefined);
       expect(sharp.croppers[walrus]).toHaveBeenCalledTimes(0);
       expect(sharp.writers[walrus]).toHaveBeenCalledTimes(1);
-      expect(sharp.writers[walrus]).toHaveBeenCalledWith(expect.stringMatching(/walrus-400\.png$/));
+      expect(sharp.writers[walrus]).toHaveBeenCalledWith(
+        expect.stringMatching(/walrus-400\.png$/)
+      );
     });
   });
 
   test('requires config', () => {
-    return generate(undefined, {}).then(() => {
-      throw new Error('should have errored');
-    }, error => {
-      expect(error instanceof errors.UsageError).toBe(true);
-      expect(error.message).toMatch('config is required');
-    })
+    return generate(undefined, {}).then(
+      () => {
+        throw new Error('should have errored');
+      },
+      error => {
+        expect(error instanceof errors.UsageError).toBe(true);
+        expect(error.message).toMatch('config is required');
+      }
+    );
   });
 
   test('other initial usage errors', () => {
-    return generate({}, {
-      ids: ['foo', 'bar']
-    }).then(() => {
-      throw new Error('should have errored');
-    }, result => {
-      result.forEach(error => {
-        expect(error instanceof errors.UsageError).toBe(true);
-      });
-      expect(result.some(error => error.message.includes('inputDirectory')));
-      expect(result.some(error => error.message.includes('outputDirectory')));
-      expect(result.some(error => error.message.includes('"foo"')));
-      expect(result.some(error => error.message.includes('"bar"')));
-    })
+    return generate(
+      {},
+      {
+        ids: ['foo', 'bar']
+      }
+    ).then(
+      () => {
+        throw new Error('should have errored');
+      },
+      result => {
+        result.forEach(error => {
+          expect(error instanceof errors.UsageError).toBe(true);
+        });
+        expect(result.some(error => error.message.includes('inputDirectory')));
+        expect(result.some(error => error.message.includes('outputDirectory')));
+        expect(result.some(error => error.message.includes('"foo"')));
+        expect(result.some(error => error.message.includes('"bar"')));
+      }
+    );
   });
 
   test('config item usage errors', () => {
@@ -201,18 +234,29 @@ describe('generate only', () => {
       },
       osprey: {
         sizes: [{ width: 300 }, { width: 600 }]
-      },
+      }
     };
     const options = { inputDirectory, outputDirectory };
-    return generate(imageConfig, options).then(() => {
-      throw new Error('should have errored');
-    }, result => {
-      result.forEach(error => {
-        expect(error instanceof errors.UsageError).toBe(true);
-      });
-      expect(result.some(error => error.message.includes('basename missing for "osprey"')));
-      expect(result.some(error => error.message.includes('sizes missing for "bear"')));
-    })
+    return generate(imageConfig, options).then(
+      () => {
+        throw new Error('should have errored');
+      },
+      result => {
+        result.forEach(error => {
+          expect(error instanceof errors.UsageError).toBe(true);
+        });
+        expect(
+          result.some(error =>
+            error.message.includes('basename missing for "osprey"')
+          )
+        );
+        expect(
+          result.some(error =>
+            error.message.includes('sizes missing for "bear"')
+          )
+        );
+      }
+    );
   });
 
   test('crop value errors', () => {
@@ -220,14 +264,17 @@ describe('generate only', () => {
       osprey: {
         basename: 'osprey.jpg',
         sizes: [{ width: 300, crop: 'foo' }, { width: 600 }]
-      },
+      }
     };
     const options = { inputDirectory, outputDirectory };
-    return generate(imageConfig, options).then(() => {
-      throw new Error('should have errored');
-    }, error => {
-      expect(error instanceof errors.UsageError).toBe(true);
-      expect(error.message).toMatch('"foo" is not a valid crop value');
-    })
+    return generate(imageConfig, options).then(
+      () => {
+        throw new Error('should have errored');
+      },
+      error => {
+        expect(error instanceof errors.UsageError).toBe(true);
+        expect(error.message).toMatch('"foo" is not a valid crop value');
+      }
+    );
   });
 });
