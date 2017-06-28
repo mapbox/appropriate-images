@@ -8,7 +8,9 @@ Generate appropriately resized and optimized images into your website, using a c
 
 Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
 
-[`getAppropriateImageUrl`] can be used in the browser to determine which size variant of an image to render, given an [image configuration] and the available width.
+[`getAppropriateImageUrl`] can be used in the browser to determine which size variant of an image to render, given an [image configuration] and the available width. Examples:
+
+- [appropriate-images-react](https://github.com/mapbox/appropriate-images-react) shows how you can use [`getAppropriateImageUrl`] with React to render the image most appropriate within an element's available width.
 
 ## API
 
@@ -231,3 +233,4 @@ An array of objects representing sizes. Each size *must* include a `width`, and 
 [`createCli`]: #createcli
 [image configuration]: #image-configuration
 [`basename`]: #basename
+[`getAppropriateImageUrl`]: #getappropriateimageurl
