@@ -36,9 +36,8 @@ function getAppropriateImageUrl(options) {
     }
   }
 
-  var heightString = selectedSize.height === undefined
-    ? ''
-    : 'x' + String(selectedSize.height);
+  var heightString =
+    selectedSize.height === undefined ? '' : 'x' + String(selectedSize.height);
   var sizeSuffix = String(selectedSize.width) + heightString;
   var splitBasename = config.basename.split('.');
   var extension = supportsWebp() ? 'webp' : splitBasename[1];

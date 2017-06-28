@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "lint-staged",
-    "format": "prettier --single-quote --write '{,lib/**,browser/**,test/**}*.js'",
+    "format": "prettier --single-quote --write '{,lib/**/,browser/**/,test/**/}*.js'",
     "lint": "eslint .",
     "test-jest": "jest",
     "pretest": "npm run lint",
@@ -51,15 +51,16 @@
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "eslint": "^4.0.0",
+    "eslint": "^4.1.0",
     "eslint-plugin-node": "^5.0.0",
-    "husky": "^0.13.4",
+    "husky": "^0.14.1",
     "jest": "^20.0.4",
-    "lint-staged": "^3.6.1",
+    "lint-staged": "^4.0.0",
     "prettier": "^1.4.4"
   },
   "lint-staged": {
-    "{,lib/**,browser/**,test/**}*.js": [
+    "{,lib/**/,browser/**/,test/**/}*.js": [
+      "eslint",
       "prettier --single-quote --write",
       "git add"
     ]
