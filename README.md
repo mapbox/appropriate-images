@@ -8,9 +8,9 @@ Generate appropriately resized and optimized images into your website, using a c
 
 Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
 
-[`getAppropriateImageUrl`] can be used in the browser to determine which size variant of an image to render, given an [image configuration] and the available width. Examples:
+[`@mapbox/appropriate-images-get-url`] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width. Examples:
 
-- [appropriate-images-react](https://github.com/mapbox/appropriate-images-react) shows how you can use [`getAppropriateImageUrl`] with React to render the image most appropriate within an element's available width.
+[@mapbox/appropriate-images-react] can be used to do this in React, with a component that measures its own available width.
 
 ## API
 
@@ -121,84 +121,6 @@ my-appropriate-images horse bear pig
 my-appropriate-images --all --quiet
 ```
 
-### getAppropriateImageUrl
-
-**For the browser!**
-
-For your browser bundle, import this directly from `@mapbox/appropriate-images/browser/get-appropriate-image-url`.
-
-`getAppropriateImageUrl(options: Object): string`
-
-This is how the image configuration used for [`generate`], above, can be reused in the browser to select the appropriate image to load at runtime.
-Uses the configuration and a width value to figure out the URL of the image variant that should be loaded.
-
-The returned URL will account for
-
-- the available width,
-- the resolution of the screen, and
-- whether or not the browser supports `webp`.
-
-The image variant that is selected will be **the narrowest variant that is at least as wide as the available width, or else, if the available width exceeds all sizes, the widest variant**.
-
-If you created your image variants with [`generate`], the URLs this function returns should match the paths to resized, optimized images.
-
-**Options**
-
-- **imageId** `string` (required) - Id of the image to be loaded.
-  Image ids correspond to keys in the [image configuration].
-- **imageConfig** `Object` (required) - You [image configuration].
-- **width** `?number` - Default: `Infinity`.
-  Not technically required, but you should provide it.
-  This is the width available to the image.
-  This is key to figuring out which size variant to load.
-- **hiResRatio** `?number` - Default: `1.3`.
-  The ratio at which you want to consider a screen "high resolution".
-  If the browser judges that the screen is high resolution, according to this ratio, the `width` provided will be multiplied by this ratio when determining which size variant to load.
-  This means that in a `300px`-wide space but *on a Retina screen*, the image at least `600px` wide will be loaded.
-- **imageDirectory** `?string` - If provided, this will be prepended to the URL.
-
-Examples:
-
-```js
-const getAppropriateImageUrl = require('@mapbox/appropriate-images/browser/get-appropriate-image-url');
-
-const imageConfig = {
-  bear: {
-    basename: 'bear.png',
-    sizes: [{ width: 300 }, { width: 600 }]
-  },
-  montaraz: {
-    basename: 'montaraz.jpg',
-    sizes: [
-      { width: 600, height: 500 },
-      { width: 1200, height: 800, crop: 'north' },
-      { width: 200, height: 200, crop: 'southeast' },
-    ]
-  }
-};
-
-getAppropriateImageUrl({ imageConfig, imageId: 'bear', width: 280 });
-// On a regular-resolution screen: bear-300.png or webp
-// On a high-resolution screen: bear-600.png or webp
-
-getAppropriateImageUrl({ imageConfig, imageId: 'bear', width: 550 });
-// bear-600.png or webp
-
-getAppropriateImageUrl({ imageConfig, imageId: 'bear', width: 800 });
-// bear-600.png or webp
-
-getAppropriateImageUrl({
-  imageConfig,  
-  imageId: 'montaraz',
-  width: 400,
-  imageDirectory: 'img/optimized/'
-});
-// On a regular-resolution screen: img/optimized/montaraz-600x500.jpg or webp
-// On a high-resolution screen: img/optimized/montaraz-1200x800.jpg or webp
-```
-
-**For some examples of using this function in combination with React, check out the [appropriate-images-react](https://github.com/mapbox/appropriate-images-react) repo.**
-
 ## Image configuration
 
 The image configuration is an object. For every property:
@@ -233,4 +155,5 @@ An array of objects representing sizes. Each size *must* include a `width`, and 
 [`createCli`]: #createcli
 [image configuration]: #image-configuration
 [`basename`]: #basename
-[`getAppropriateImageUrl`]: #getappropriateimageurl
+[`@mapbox/appropriate-images-get-url`]: https://github.com/mapbox/appropriate-images-get-url
+[@mapbox/appropriate-images-react]: https://github.com/mapbox/appropriate-images-react
