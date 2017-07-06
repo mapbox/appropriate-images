@@ -3,6 +3,7 @@
 const del = require('del');
 const path = require('path');
 const tempy = require('tempy');
+const fs = require('fs');
 const errors = require('../lib/errors');
 const generate = require('../lib/generate');
 const optimize = require('../lib/optimize');
@@ -13,17 +14,17 @@ jest.mock('../lib/optimize', () => {
 });
 
 jest.mock('sharp', () => {
-  const resizers = {};
-  const croppers = {};
-  const writers = {};
-  const m = jest.fn(filename => {
+  const resizers = new Map();
+  const croppers = new Map();
+  const writers = new Map();
+  const m = jest.fn(img => {
     const s = {};
     s.resize = jest.fn(() => s);
     s.crop = jest.fn(() => s);
     s.toFile = jest.fn(() => Promise.resolve('sharpened'));
-    resizers[filename] = s.resize;
-    croppers[filename] = s.crop;
-    writers[filename] = s.toFile;
+    resizers.set(img, s.resize);
+    croppers.set(img, s.crop);
+    writers.set(img, s.toFile);
     return s;
   });
   m.gravity = { north: true, southeast: true, northwest: true };
@@ -123,71 +124,106 @@ describe('generate only', () => {
       expect(sharp).toHaveBeenCalledTimes(4);
 
       const bear = path.join(inputDirectory, 'bear.png');
-      expect(sharp).toHaveBeenCalledWith(bear);
-      expect(sharp.resizers[bear]).toHaveBeenCalledTimes(2);
-      expect(sharp.resizers[bear]).toHaveBeenCalledWith(300, undefined);
-      expect(sharp.resizers[bear]).toHaveBeenCalledWith(600, undefined);
-      expect(sharp.croppers[bear]).toHaveBeenCalledTimes(0);
-      expect(sharp.writers[bear]).toHaveBeenCalledTimes(2);
-      expect(sharp.writers[bear]).toHaveBeenCalledWith(
+      const bearExpectedBuffer = fs.readFileSync(bear);
+      const bearCall = sharp.mock.calls.find(x =>
+        x[0].equals(bearExpectedBuffer)
+      );
+      expect(bearCall).toBeTruthy();
+      const bearBuffer = bearCall[0];
+      expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledTimes(2);
+      expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledWith(
+        300,
+        undefined
+      );
+      expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledWith(
+        600,
+        undefined
+      );
+      expect(sharp.croppers.get(bearBuffer)).toHaveBeenCalledTimes(0);
+      expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledTimes(2);
+      expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/bear-300\.png$/)
       );
-      expect(sharp.writers[bear]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/bear-600\.png$/)
       );
 
       const montaraz = path.join(inputDirectory, 'montaraz.jpg');
-      expect(sharp).toHaveBeenCalledWith(montaraz);
-      expect(sharp.resizers[montaraz]).toHaveBeenCalledTimes(4);
-      expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(300, 500);
-      expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(1200, undefined);
-      expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(200, 200);
-      expect(sharp.resizers[montaraz]).toHaveBeenCalledWith(210, 210);
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledTimes(3);
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+      const montarazExpectedBuffer = fs.readFileSync(montaraz);
+      const montarazCall = sharp.mock.calls.find(x =>
+        x[0].equals(montarazExpectedBuffer)
+      );
+      expect(montarazCall).toBeTruthy();
+      const montarazBuffer = montarazCall[0];
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledTimes(4);
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(300, 500);
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
+        1200,
+        undefined
+      );
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(200, 200);
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(210, 210);
+      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledTimes(3);
+      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
         sharp.gravity.north
       );
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
         sharp.gravity.southeast
       );
-      expect(sharp.croppers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
         sharp.strategy.entropy
       );
-      expect(sharp.writers[montaraz]).toHaveBeenCalledTimes(4);
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledTimes(4);
+      expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/montaraz-300x500\.jpg$/)
       );
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/montaraz-1200\.jpg$/)
       );
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/montaraz-200x200\.jpg$/)
       );
-      expect(sharp.writers[montaraz]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/montaraz-210x210\.jpg$/)
       );
 
       const osprey = path.join(inputDirectory, 'osprey.jpg');
-      expect(sharp).toHaveBeenCalledWith(osprey);
-      expect(sharp.resizers[osprey]).toHaveBeenCalledTimes(2);
-      expect(sharp.resizers[osprey]).toHaveBeenCalledWith(600, undefined);
-      expect(sharp.resizers[osprey]).toHaveBeenCalledWith(300, 300);
-      expect(sharp.croppers[osprey]).toHaveBeenCalledTimes(0);
-      expect(sharp.writers[osprey]).toHaveBeenCalledTimes(2);
-      expect(sharp.writers[osprey]).toHaveBeenCalledWith(
+      const ospreyExpectedBuffer = fs.readFileSync(osprey);
+      const ospreyCall = sharp.mock.calls.find(x =>
+        x[0].equals(ospreyExpectedBuffer)
+      );
+      expect(ospreyCall).toBeTruthy();
+      const ospreyBuffer = ospreyCall[0];
+      expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledTimes(2);
+      expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(
+        600,
+        undefined
+      );
+      expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(300, 300);
+      expect(sharp.croppers.get(ospreyBuffer)).toHaveBeenCalledTimes(0);
+      expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledTimes(2);
+      expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/osprey-600\.jpg$/)
       );
-      expect(sharp.writers[osprey]).toHaveBeenCalledWith(
+      expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/osprey-300x300\.jpg$/)
       );
 
       const walrus = path.join(inputDirectory, 'walrus.png');
-      expect(sharp).toHaveBeenCalledWith(walrus);
-      expect(sharp.resizers[walrus]).toHaveBeenCalledTimes(1);
-      expect(sharp.resizers[walrus]).toHaveBeenCalledWith(400, undefined);
-      expect(sharp.croppers[walrus]).toHaveBeenCalledTimes(0);
-      expect(sharp.writers[walrus]).toHaveBeenCalledTimes(1);
-      expect(sharp.writers[walrus]).toHaveBeenCalledWith(
+      const walrusExpectedBuffer = fs.readFileSync(walrus);
+      const walrusCall = sharp.mock.calls.find(x =>
+        x[0].equals(walrusExpectedBuffer)
+      );
+      expect(walrusCall).toBeTruthy();
+      const walrusBuffer = walrusCall[0];
+      expect(sharp.resizers.get(walrusBuffer)).toHaveBeenCalledTimes(1);
+      expect(sharp.resizers.get(walrusBuffer)).toHaveBeenCalledWith(
+        400,
+        undefined
+      );
+      expect(sharp.croppers.get(walrusBuffer)).toHaveBeenCalledTimes(0);
+      expect(sharp.writers.get(walrusBuffer)).toHaveBeenCalledTimes(1);
+      expect(sharp.writers.get(walrusBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/walrus-400\.png$/)
       );
     });
@@ -226,18 +262,34 @@ describe('generate only', () => {
       expect(sharp).toHaveBeenCalledTimes(2);
 
       const bear = path.join(inputDirectory, 'bear.png');
-      expect(sharp).not.toHaveBeenCalledWith(bear);
+      const bearExpectedBuffer = fs.readFileSync(bear);
+      const bearCall = sharp.mock.calls.find(x =>
+        x[0].equals(bearExpectedBuffer)
+      );
+      expect(bearCall).toBeFalsy();
 
       const montaraz = path.join(inputDirectory, 'montaraz.jpg');
-      expect(sharp).not.toHaveBeenCalledWith(montaraz);
+      const montarazExpectedBuffer = fs.readFileSync(montaraz);
+      const montarazCall = sharp.mock.calls.find(x =>
+        x[0].equals(montarazExpectedBuffer)
+      );
+      expect(montarazCall).toBeFalsy();
 
       const osprey = path.join(inputDirectory, 'osprey.jpg');
-      expect(sharp).toHaveBeenCalledWith(osprey);
-      expect(sharp.resizers[osprey]).toHaveBeenCalledTimes(2);
+      const ospreyExpectedBuffer = fs.readFileSync(osprey);
+      const ospreyCall = sharp.mock.calls.find(x =>
+        x[0].equals(ospreyExpectedBuffer)
+      );
+      expect(ospreyCall).toBeTruthy();
+      expect(sharp.resizers.get(ospreyCall[0])).toHaveBeenCalledTimes(2);
 
       const walrus = path.join(inputDirectory, 'walrus.png');
-      expect(sharp).toHaveBeenCalledWith(walrus);
-      expect(sharp.resizers[walrus]).toHaveBeenCalledTimes(1);
+      const walrusExpectedBuffer = fs.readFileSync(walrus);
+      const walrusCall = sharp.mock.calls.find(x =>
+        x[0].equals(walrusExpectedBuffer)
+      );
+      expect(walrusCall).toBeTruthy();
+      expect(sharp.resizers.get(walrusCall[0])).toHaveBeenCalledTimes(1);
     });
   });
 

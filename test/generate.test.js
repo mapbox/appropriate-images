@@ -5,6 +5,7 @@ const pify = require('pify');
 const del = require('del');
 const path = require('path');
 const tempy = require('tempy');
+const errors = require('../lib/errors');
 const generate = require('../lib/generate');
 
 describe('generate', () => {
@@ -111,5 +112,26 @@ describe('generate', () => {
           'walrus-400.webp'
         ]);
       });
+  });
+
+  test('config item bad basename', () => {
+    const imageConfig = {
+      bear: {
+        basename: 'bearrrrr.png',
+        sizes: [{ width: 300 }, { width: 600 }]
+      }
+    };
+    const options = { inputDirectory, outputDirectory };
+    return generate(imageConfig, options).then(
+      () => {
+        throw new Error('should have errored');
+      },
+      result => {
+        expect(result.length).toBe(1);
+        const error = result[0];
+        expect(error instanceof errors.UsageError).toBe(true);
+        expect(error.message).toMatch('invalid basename for "bear"');
+      }
+    );
   });
 });
