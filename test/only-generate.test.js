@@ -193,6 +193,54 @@ describe('generate only', () => {
     });
   });
 
+  test('sharp is called as expected with limited ids', () => {
+    const imageConfig = {
+      bear: {
+        basename: 'bear.png',
+        sizes: [{ width: 300 }, { width: 600 }]
+      },
+      montaraz: {
+        basename: 'montaraz.jpg',
+        sizes: [
+          { width: 300, height: 500 },
+          { width: 1200, crop: 'north' },
+          { width: 200, height: 200, crop: 'southeast' },
+          { width: 210, height: 210, crop: 'entropy' }
+        ]
+      },
+      osprey: {
+        basename: 'osprey.jpg',
+        sizes: [{ width: 600 }, { width: 300, height: 300 }]
+      },
+      walrus: {
+        basename: 'walrus.png',
+        sizes: [{ width: 400 }]
+      }
+    };
+    const options = {
+      inputDirectory,
+      outputDirectory,
+      ids: ['osprey', 'walrus']
+    };
+    return generate(imageConfig, options).then(() => {
+      expect(sharp).toHaveBeenCalledTimes(2);
+
+      const bear = path.join(inputDirectory, 'bear.png');
+      expect(sharp).not.toHaveBeenCalledWith(bear);
+
+      const montaraz = path.join(inputDirectory, 'montaraz.jpg');
+      expect(sharp).not.toHaveBeenCalledWith(montaraz);
+
+      const osprey = path.join(inputDirectory, 'osprey.jpg');
+      expect(sharp).toHaveBeenCalledWith(osprey);
+      expect(sharp.resizers[osprey]).toHaveBeenCalledTimes(2);
+
+      const walrus = path.join(inputDirectory, 'walrus.png');
+      expect(sharp).toHaveBeenCalledWith(walrus);
+      expect(sharp.resizers[walrus]).toHaveBeenCalledTimes(1);
+    });
+  });
+
   test('requires config', () => {
     return generate(undefined, {}).then(
       () => {
