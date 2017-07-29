@@ -8,18 +8,19 @@ Generate appropriately resized and optimized images into your website, using a c
 
 Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
 
-[`@mapbox/appropriate-images-get-url`] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width. Examples:
+[`@mapbox/appropriate-images-get-url`] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width.
 
 [@mapbox/appropriate-images-react] can be used to do this in React, with a component that measures its own available width.
 
+## Installation
+
+```
+npm install @mapbox/appropriate-images
+```
+
 ## API
 
-### generate
-
-`generate(imageConfig: Object, options: Object): Promise<Array<string>>`
-
-`imageConfig` is an [image configuration].
-Options are documented below.
+### generate(imageConfig, [options])
 
 Returns a Promise that resolves with an array of filenames for the resized and optimized images that have been written to your output directory.
 
@@ -55,23 +56,12 @@ You will get files with the following basenames:
 - `bear-600x200.png`
 - `bear-600x200.webp`
 
-**Options**
-
-- **inputDirectory** `string` (required) - Path to your directory of source images.
-  The [`basename`]s in your image configuration should be relative to this directory.
-- **outputDirectory** `string` (required) - Path to the directory where resized, optimized images should be written.
-- **ids** `?Array<string>` - Ids of images to be processed.
-  Image ids correspond to keys in the [image configuration].
-  If not provided, all images in the configuration will be processed.
-- **pngquant** `?Object` - [Options for imageminPngquant](https://github.com/imagemin/imagemin-pngquant#options).
-- **mozjpeg** `?Object` - [Options for imageminMozjpeg](https://github.com/imagemin/imagemin-mozjpeg#options).
-- **webp** `?Object` - [Options for imageminWebp](https://github.com/imagemin/imagemin-webp#options).
-
 ```js
+// Example
 const appropriateImages = require('@mapbox/appropriate-images');
 const myImageConfig = require('../path/to/my/image/config.js');
 
-appropriateImages(myImageConfig, {
+appropriateImages.generate(myImageConfig, {
   inputDirectory: '../path/to/my/source/image/directory/',
   outputDirectory: '../path/to/directory/where/i/want/resized/optimized/images/'
 })
@@ -87,14 +77,65 @@ appropriateImages(myImageConfig, {
   });
 ```
 
-### createCli
+#### imageConfig
 
-`createCli(imageConfig: Object, options: Object): void`
+Type: `Object`.
 
-Create a CLI for your specific directory structure, providing a quick way to generate and re-generate images, with nice error handling.
+An [image configuration] object.
+Options are documented below.
 
-This package exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure it from the command line.
-With `createCli`, you can configure it within a JS file, then run that JS file as a CLI.
+#### options
+
+##### inputDirectory
+
+Type: `string`.
+**Required**.
+
+Path to your directory of source images.
+The [`basename`]s in your image configuration should be relative to this directory.
+
+##### outputDirectory
+
+Type: `string`.
+**Required**.
+
+Path to the directory where resized, optimized images should be written.
+
+##### ids
+
+Type: `Array<string>`.
+
+Ids of images to be processed.
+Image ids correspond to keys in the [image configuration].
+If not provided, all images in the configuration will be processed.
+
+##### pngquant
+
+Type: `Object`.
+
+[Options for imageminPngquant](https://github.com/imagemin/imagemin-pngquant#options).
+
+##### mozjpeg
+
+Type: `Object`.
+
+[Options for imageminMozjpeg](https://github.com/imagemin/imagemin-mozjpeg#options).
+
+##### webp
+
+Type: `Object`.
+
+[Options for imageminWebp](https://github.com/imagemin/imagemin-webp#options).
+
+### createCli(imageConfig, [options])
+
+Executes a CLI for your specific directory structure that runs [`generate`].
+This provides a quick way to generate and re-generate images, with nice error handling.
+
+The arguments are the same as for [`generate`].
+
+**appropriate-images exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure `generate` from the command line.**
+With `createCli`, you can define your configuration within a JS file, then run that JS file as a CLI.
 
 ```js
 #!/usr/bin/env node
@@ -111,11 +152,11 @@ const myOptions = {
 createCli(myImageConfig, myOptions);
 ```
 
-Don't forget to `chmod +x path/to/file` to make it executable.
+**Don't forget to `chmod +x path/to/file` to make it executable.**
 
 Then you can run it as a CLI:
 
-```
+```bash
 my-appropriate-images horse bear pig
 
 my-appropriate-images --all --quiet
@@ -133,23 +174,40 @@ Each image's configuration object includes the following:
 
 ### `basename`
 
-`string`
+Type `string`.
+**Required**.
 
 The path from `options.inputDirectory` to the image (including the image's extension).
 
 ### `sizes`
 
-`Array<Object>`
+Type: `Array<Object>`.
+**Required**.
 
 An array of objects representing sizes. Each size *must* include a `width`, and can optionally include other properties.
 
-- **width** `number` (required) - A width for the generated image.
-- **height** `?number` - The height for the generated image.
-  If no `height` is provided, the `width` is used and the image's aspect ratio is preserved.
-  If a `height` *is* provided and it does not fit the image's aspect ratio, the image will be cropped.
-- **crop** `?string` - Default: `'center'`.
-  Defines the manner in which the image will be cropped if both `width` and `height` are provided.
-  Must be [a valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-resize/#crop): `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`, `center`, `centre`, `entropy`, and `attention`.
+#### width
+
+Type: `number`.
+**Required**.
+
+A width for the generated image.
+
+#### height
+
+Type: `number`.
+
+A height for the generated image.
+If no `height` is provided, the `width` is used and the image's aspect ratio is preserved.
+If a `height` *is* provided and it does not fit the image's aspect ratio, the image will be cropped.
+
+#### crop
+
+Type: `string`.
+Default: `'center'`.
+
+Defines the manner in which the image will be cropped *if both `width` and `height` are provided*.
+Must be [a valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-resize/#crop): `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`, `center`, `centre`, `entropy`, and `attention`.
 
 [`generate`]: #generate
 [`createCli`]: #createcli
