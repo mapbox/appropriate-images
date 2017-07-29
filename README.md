@@ -153,7 +153,7 @@ const myOptions = {
   outputDirectory: '../path/to/directory/where/i/want/resized/optimized/images/'
 };
 
-createCli(myImageConfig, myOptions);
+appropriateImages.createCli(myImageConfig, myOptions);
 ```
 
 **Don't forget to `chmod +x path/to/file` to make it executable.**
