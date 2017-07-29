@@ -8,7 +8,7 @@ Generate appropriately resized and optimized images into your website, using a c
 
 Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
 
-[`@mapbox/appropriate-images-get-url`] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width.
+[@mapbox/appropriate-images-get-url] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width.
 
 [@mapbox/appropriate-images-react] can be used to do this in React, with a component that measures its own available width.
 
@@ -20,13 +20,15 @@ npm install @mapbox/appropriate-images
 
 ## API
 
-### generate(imageConfig, [options])
+### generate
+
+`appropriateImages.generate(imageConfig, [options])`
 
 Returns a Promise that resolves with an array of filenames for the resized and optimized images that have been written to your output directory.
 
 When the Promise rejects, it may reject with a single error or an array of errors.
 
-For each image it will:
+For each image this function will will:
 
 1. Clear prior output and create temporary size variants.
   - Delete any existing images in the output directory that were previously derived from the source image.
@@ -127,14 +129,16 @@ Type: `Object`.
 
 [Options for imageminWebp](https://github.com/imagemin/imagemin-webp#options).
 
-### createCli(imageConfig, [options])
+### createCli
+
+`appropriateImages.createCli(imageConfig, [options])`
 
 Executes a CLI for your specific directory structure that runs [`generate`].
 This provides a quick way to generate and re-generate images, with nice error handling.
 
 The arguments are the same as for [`generate`].
 
-**appropriate-images exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure `generate` from the command line.**
+**appropriate-images exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure `generate` from the command line, and your configuration should stay constant within a project.**
 With `createCli`, you can define your configuration within a JS file, then run that JS file as a CLI.
 
 ```js
@@ -172,14 +176,14 @@ The image configuration is an object. For every property:
 
 Each image's configuration object includes the following:
 
-### `basename`
+### basename
 
 Type `string`.
 **Required**.
 
 The path from `options.inputDirectory` to the image (including the image's extension).
 
-### `sizes`
+### sizes
 
 Type: `Array<Object>`.
 **Required**.
@@ -213,5 +217,5 @@ Must be [a valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-re
 [`createCli`]: #createcli
 [image configuration]: #image-configuration
 [`basename`]: #basename
-[`@mapbox/appropriate-images-get-url`]: https://github.com/mapbox/appropriate-images-get-url
+[@mapbox/appropriate-images-get-url]: https://github.com/mapbox/appropriate-images-get-url
 [@mapbox/appropriate-images-react]: https://github.com/mapbox/appropriate-images-react
