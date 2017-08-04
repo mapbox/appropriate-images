@@ -7,7 +7,7 @@ const createCli = require('../lib/create-cli');
 const imageConfig = {
   bear: {
     basename: 'bear.png',
-    sizes: [{ width: 300 }, { width: 600 }]
+    sizes: [{ width: 300 }, { width: 768 }]
   },
   montaraz: {
     basename: 'montaraz.jpg',
@@ -20,7 +20,7 @@ const imageConfig = {
   },
   osprey: {
     basename: 'osprey.jpg',
-    sizes: [{ width: 600 }, { width: 300, height: 300 }]
+    sizes: [{ width: 768 }, { width: 300, height: 300 }]
   },
   walrus: {
     basename: 'walrus.png',

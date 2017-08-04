@@ -134,4 +134,34 @@ describe('generate', () => {
       }
     );
   });
+
+  test('request same width as original', () => {
+    const imageConfig = {
+      bear: {
+        basename: 'bear.png',
+        sizes: [{ width: 768 }]
+      },
+      osprey: {
+        basename: 'osprey.jpg',
+        sizes: [{ width: 768 }]
+      },
+      walrus: {
+        basename: 'walrus.png',
+        sizes: [{ width: 489 }]
+      }
+    };
+    const options = { inputDirectory, outputDirectory };
+    return generate(imageConfig, options)
+      .then(() => pify(fs.readdir)(outputDirectory))
+      .then(outputFiles => {
+        expect(outputFiles).toEqual([
+          'bear-768.png',
+          'bear-768.webp',
+          'osprey-768.jpg',
+          'osprey-768.webp',
+          'walrus-489.png',
+          'walrus-489.webp'
+        ]);
+      });
+  });
 });
