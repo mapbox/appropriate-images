@@ -2,15 +2,13 @@
 
 [![Build Status](https://travis-ci.org/mapbox/appropriate-images.svg?branch=master)](https://travis-ci.org/mapbox/appropriate-images)
 
-🚧🚧 **EXPERIMENTAL! WORK IN PROGRESS!** 🚧🚧
+Generate appropriately resized and optimized images for your website, using a configuration object that can be shared with client-side libraries.
 
-Generate appropriately resized and optimized images into your website, using a configuration that can be shared with client-side libraries.
-
-Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imageming](https://github.com/imagemin/imagemin) plugins.
+Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imagemin](https://github.com/imagemin/imagemin) plugins.
 
 [@mapbox/appropriate-images-get-url] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width.
 
-[@mapbox/appropriate-images-react] can be used to do this in React, with a component that measures its own available width.
+[@mapbox/appropriate-images-react] can be used to do this in React, with a component that automatically measures its own available width.
 
 ## Installation
 
@@ -28,12 +26,13 @@ Returns a Promise that resolves with an array of filenames for the resized and o
 
 When the Promise rejects, it may reject with a single error or an array of errors.
 
-For each image this function will will:
+For each image this function will:
 
-1. Clear prior output and create temporary size variants.
+- Clear prior output and create temporary size variants.
   - Delete any existing images in the output directory that were previously derived from the source image.
-  - Create all the size variants on the source image and put them in a temporary directory.
-2. Optimize all (sized) images in the temporary directory, and write the optimized versions to the output directory.
+  - Create all the size variants of the source image and put them in a temporary directory.
+    Each size variant is generated in the original format (e.g. `png`) and `webp`.
+- Optimize all size variants in the temporary directory, and write those optimized images to the output directory.
 
 Output filenames have suffixes corresponding to the size of the variant.
 For example, with the following property in your [image configuration]:
@@ -84,7 +83,7 @@ appropriateImages.generate(myImageConfig, {
 Type: `Object`.
 
 An [image configuration] object.
-Options are documented below.
+Options for this configuration are documented below.
 
 #### options
 
@@ -94,7 +93,7 @@ Type: `string`.
 **Required**.
 
 Path to your directory of source images.
-The [`basename`]s in your image configuration should be relative to this directory.
+Each [`basename`] in your image configuration should be relative to this directory.
 
 ##### outputDirectory
 
@@ -109,36 +108,37 @@ Type: `Array<string>`.
 
 Ids of images to be processed.
 Image ids correspond to keys in the [image configuration].
-If not provided, all images in the configuration will be processed.
+If this option not provided, *all* images in the configuration will be processed.
 
 ##### pngquant
 
 Type: `Object`.
 
-[Options for imageminPngquant](https://github.com/imagemin/imagemin-pngquant#options).
+[Options for imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant#options).
 
 ##### mozjpeg
 
 Type: `Object`.
 
-[Options for imageminMozjpeg](https://github.com/imagemin/imagemin-mozjpeg#options).
+[Options for imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg#options).
 
 ##### webp
 
 Type: `Object`.
 
-[Options for imageminWebp](https://github.com/imagemin/imagemin-webp#options).
+[Options for imagemin-webp](https://github.com/imagemin/imagemin-webp#options).
 
 ### createCli
 
 `appropriateImages.createCli(imageConfig, [options])`
 
-Executes a CLI for your specific directory structure that runs [`generate`].
-This provides a quick way to generate and re-generate images, with nice error handling.
+Executes a CLI for your specific directory structure.
+The CLI runs [`generate`] using your specified configuration.
+It provides a quick way to generate and re-generate images, with nice error handling.
 
 The arguments are the same as for [`generate`].
 
-**appropriate-images exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure `generate` from the command line, and your configuration should stay constant within a project.**
+**appropriate-images exposes the `createCli` function instead of an actual CLI because it is not convenient to completely configure [`generate`] from the command line, and your configuration should stay constant within a project.**
 With `createCli`, you can define your configuration within a JS file, then run that JS file as a CLI.
 
 ```js
@@ -170,11 +170,11 @@ my-appropriate-images --all --quiet
 
 The image configuration is an object. For every property:
 
-- The key represents the image's `id`.
-  This image id is used by all of the fucntions above,
+- The key represents the image's id.
+  This image id is used by all of the functions above,
 - The value is an object configuring the resizing of that image.
 
-Each image's configuration object includes the following:
+Each image's configuration object includes the following properties.
 
 ### basename
 
