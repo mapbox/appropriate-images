@@ -36,7 +36,7 @@
     "del": "^3.0.0",
     "fasterror": "^1.1.0",
     "imagemin": "^5.3.1",
-    "imagemin-mozjpeg": "^6.0.0",
+    "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^5.0.1",
     "imagemin-webp": "^4.0.0",
     "lodash": "^4.17.4",
@@ -44,7 +44,7 @@
     "mkdirp": "^0.5.1",
     "p-finally": "^1.0.0",
     "pify": "^3.0.0",
-    "sharp": "^0.18.1",
+    "sharp": "^0.21.3",
     "tempy": "^0.1.0"
   },
   "devDependencies": {
