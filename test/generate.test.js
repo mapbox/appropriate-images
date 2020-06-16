@@ -45,7 +45,7 @@ describe('generate', () => {
 
     return generate(imageConfig, options)
       .then(() => pify(fs.readdir)(outputDirectory))
-      .then(outputFiles => {
+      .then((outputFiles) => {
         expect(outputFiles).toEqual([
           'bear-300.png',
           'bear-300.webp',
@@ -102,7 +102,7 @@ describe('generate', () => {
 
     return generate(imageConfig, options)
       .then(() => pify(fs.readdir)(outputDirectory))
-      .then(outputFiles => {
+      .then((outputFiles) => {
         expect(outputFiles).toEqual([
           'bear-300.png',
           'bear-300.webp',
@@ -126,7 +126,7 @@ describe('generate', () => {
       () => {
         throw new Error('should have errored');
       },
-      result => {
+      (result) => {
         expect(result.length).toBe(1);
         const error = result[0];
         expect(error instanceof errors.UsageError).toBe(true);

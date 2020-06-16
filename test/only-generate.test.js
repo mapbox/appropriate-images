@@ -17,7 +17,7 @@ jest.mock('sharp', () => {
   const resizers = new Map();
   const croppers = new Map();
   const writers = new Map();
-  const m = jest.fn(img => {
+  const m = jest.fn((img) => {
     const s = {};
     s.resize = jest.fn(() => s);
     s.crop = jest.fn(() => s);
@@ -45,7 +45,7 @@ describe('generate only', () => {
 
   test('output filenames come from optimize step', () => {
     const options = { inputDirectory, outputDirectory };
-    return generate({}, options).then(results => {
+    return generate({}, options).then((results) => {
       expect(results).toEqual(['one', 'two', 'three']);
     });
   });
@@ -79,7 +79,7 @@ describe('generate only', () => {
       expect(optimize).toHaveBeenCalledTimes(1);
       expect(optimize.mock.calls[0][1]).toEqual(options);
       const sortedBasenames = optimize.mock.calls[0][0]
-        .map(n => path.basename(n))
+        .map((n) => path.basename(n))
         .sort();
       expect(sortedBasenames).toEqual([
         'bear-300.png',
@@ -125,7 +125,7 @@ describe('generate only', () => {
 
       const bear = path.join(inputDirectory, 'bear.png');
       const bearExpectedBuffer = fs.readFileSync(bear);
-      const bearCall = sharp.mock.calls.find(x =>
+      const bearCall = sharp.mock.calls.find((x) =>
         x[0].equals(bearExpectedBuffer)
       );
       expect(bearCall).toBeTruthy();
@@ -150,7 +150,7 @@ describe('generate only', () => {
 
       const montaraz = path.join(inputDirectory, 'montaraz.jpg');
       const montarazExpectedBuffer = fs.readFileSync(montaraz);
-      const montarazCall = sharp.mock.calls.find(x =>
+      const montarazCall = sharp.mock.calls.find((x) =>
         x[0].equals(montarazExpectedBuffer)
       );
       expect(montarazCall).toBeTruthy();
@@ -189,7 +189,7 @@ describe('generate only', () => {
 
       const osprey = path.join(inputDirectory, 'osprey.jpg');
       const ospreyExpectedBuffer = fs.readFileSync(osprey);
-      const ospreyCall = sharp.mock.calls.find(x =>
+      const ospreyCall = sharp.mock.calls.find((x) =>
         x[0].equals(ospreyExpectedBuffer)
       );
       expect(ospreyCall).toBeTruthy();
@@ -211,7 +211,7 @@ describe('generate only', () => {
 
       const walrus = path.join(inputDirectory, 'walrus.png');
       const walrusExpectedBuffer = fs.readFileSync(walrus);
-      const walrusCall = sharp.mock.calls.find(x =>
+      const walrusCall = sharp.mock.calls.find((x) =>
         x[0].equals(walrusExpectedBuffer)
       );
       expect(walrusCall).toBeTruthy();
@@ -263,21 +263,21 @@ describe('generate only', () => {
 
       const bear = path.join(inputDirectory, 'bear.png');
       const bearExpectedBuffer = fs.readFileSync(bear);
-      const bearCall = sharp.mock.calls.find(x =>
+      const bearCall = sharp.mock.calls.find((x) =>
         x[0].equals(bearExpectedBuffer)
       );
       expect(bearCall).toBeFalsy();
 
       const montaraz = path.join(inputDirectory, 'montaraz.jpg');
       const montarazExpectedBuffer = fs.readFileSync(montaraz);
-      const montarazCall = sharp.mock.calls.find(x =>
+      const montarazCall = sharp.mock.calls.find((x) =>
         x[0].equals(montarazExpectedBuffer)
       );
       expect(montarazCall).toBeFalsy();
 
       const osprey = path.join(inputDirectory, 'osprey.jpg');
       const ospreyExpectedBuffer = fs.readFileSync(osprey);
-      const ospreyCall = sharp.mock.calls.find(x =>
+      const ospreyCall = sharp.mock.calls.find((x) =>
         x[0].equals(ospreyExpectedBuffer)
       );
       expect(ospreyCall).toBeTruthy();
@@ -285,7 +285,7 @@ describe('generate only', () => {
 
       const walrus = path.join(inputDirectory, 'walrus.png');
       const walrusExpectedBuffer = fs.readFileSync(walrus);
-      const walrusCall = sharp.mock.calls.find(x =>
+      const walrusCall = sharp.mock.calls.find((x) =>
         x[0].equals(walrusExpectedBuffer)
       );
       expect(walrusCall).toBeTruthy();
@@ -298,7 +298,7 @@ describe('generate only', () => {
       () => {
         throw new Error('should have errored');
       },
-      error => {
+      (error) => {
         expect(error instanceof errors.UsageError).toBe(true);
         expect(error.message).toMatch('config is required');
       }
@@ -315,14 +315,18 @@ describe('generate only', () => {
       () => {
         throw new Error('should have errored');
       },
-      result => {
-        result.forEach(error => {
+      (result) => {
+        result.forEach((error) => {
           expect(error instanceof errors.UsageError).toBe(true);
         });
-        expect(result.some(error => error.message.includes('inputDirectory')));
-        expect(result.some(error => error.message.includes('outputDirectory')));
-        expect(result.some(error => error.message.includes('"foo"')));
-        expect(result.some(error => error.message.includes('"bar"')));
+        expect(
+          result.some((error) => error.message.includes('inputDirectory'))
+        );
+        expect(
+          result.some((error) => error.message.includes('outputDirectory'))
+        );
+        expect(result.some((error) => error.message.includes('"foo"')));
+        expect(result.some((error) => error.message.includes('"bar"')));
       }
     );
   });
@@ -341,17 +345,17 @@ describe('generate only', () => {
       () => {
         throw new Error('should have errored');
       },
-      result => {
-        result.forEach(error => {
+      (result) => {
+        result.forEach((error) => {
           expect(error instanceof errors.UsageError).toBe(true);
         });
         expect(
-          result.some(error =>
+          result.some((error) =>
             error.message.includes('basename missing for "osprey"')
           )
         );
         expect(
-          result.some(error =>
+          result.some((error) =>
             error.message.includes('sizes missing for "bear"')
           )
         );
@@ -371,7 +375,7 @@ describe('generate only', () => {
       () => {
         throw new Error('should have errored');
       },
-      error => {
+      (error) => {
         expect(error instanceof errors.UsageError).toBe(true);
         expect(error.message).toMatch('"foo" is not a valid crop value');
       }
