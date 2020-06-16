@@ -205,13 +205,13 @@ A height for the generated image.
 If no `height` is provided, the `width` is used and the image's aspect ratio is preserved.
 If a `height` *is* provided and it does not fit the image's aspect ratio, the image will be cropped.
 
-#### crop
+#### options
 
-Type: `string`.
-Default: `'center'`.
+Type: `object`.
+Default: `{ fit: "cover" }`
 
-Defines the manner in which the image will be cropped *if both `width` and `height` are provided*.
-Must be [a valid `crop` value for sharp](http://sharp.dimens.io/en/stable/api-resize/#crop): `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`, `center`, `centre`, `entropy`, and `attention`.
+Defines the manner how the image should fit *if both `width` and `height` are provided*. See [resize](https://sharp.pixelplumbing.com/api-resize#resize).
+
 
 [`generate`]: #generate
 [`createCli`]: #createcli

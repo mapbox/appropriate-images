@@ -26,9 +26,9 @@ describe('generate', () => {
         basename: 'montaraz.jpg',
         sizes: [
           { width: 300, height: 500 },
-          { width: 1200, options: { position: 'north' } },
-          { width: 200, height: 200, options: { position: 'southeast' } },
-          { width: 210, height: 210, options: { position: 'northwest' } }
+          { width: 1200, options: { gravity: 'north' } },
+          { width: 200, height: 200, options: { gravity: 'southeast' } },
+          { width: 210, height: 210, options: { gravity: 'northwest' } }
         ]
       },
       osprey: {
@@ -79,9 +79,9 @@ describe('generate', () => {
         basename: 'montaraz.jpg',
         sizes: [
           { width: 300, height: 500 },
-          { width: 1200, options: { position: 'north' } },
-          { width: 200, height: 200, options: { position: 'southeast' } },
-          { width: 210, height: 210, options: { position: 'northwest' } }
+          { width: 1200, options: { gravity: 'north' } },
+          { width: 200, height: 200, options: { gravity: 'southeast' } },
+          { width: 210, height: 210, options: { gravity: 'northwest' } }
         ]
       },
       osprey: {
