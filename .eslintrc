@@ -11,7 +11,7 @@
   "rules": {
     "strict": ["error", "global"],
     "no-console": ["off"],
-    "node/no-unsupported-features": ["error", {"version": 4}],
+    "node/no-unsupported-features": ["error", {"version": 10}],
     "node/no-missing-require": "error"
   }
 }

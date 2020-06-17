@@ -15,22 +15,18 @@ jest.mock('../lib/optimize', () => {
 
 jest.mock('sharp', () => {
   const resizers = new Map();
-  const croppers = new Map();
   const writers = new Map();
   const m = jest.fn((img) => {
     const s = {};
     s.resize = jest.fn(() => s);
-    s.crop = jest.fn(() => s);
     s.toFile = jest.fn(() => Promise.resolve('sharpened'));
     resizers.set(img, s.resize);
-    croppers.set(img, s.crop);
     writers.set(img, s.toFile);
     return s;
   });
   m.gravity = { north: true, southeast: true, northwest: true };
   m.strategy = { entropy: true };
   m.resizers = resizers;
-  m.croppers = croppers;
   m.writers = writers;
   return m;
 });
@@ -60,9 +56,9 @@ describe('generate only', () => {
         basename: 'montaraz.jpg',
         sizes: [
           { width: 300, height: 500 },
-          { width: 1200, crop: 'north' },
-          { width: 200, height: 200, crop: 'southeast' },
-          { width: 210, height: 210, crop: 'northwest' }
+          { width: 1200, options: { gravity: 'north' } },
+          { width: 200, height: 200, options: { gravity: 'southeast' } },
+          { width: 210, height: 210, options: { gravity: 'southeast' } }
         ]
       },
       osprey: {
@@ -105,9 +101,9 @@ describe('generate only', () => {
         basename: 'montaraz.jpg',
         sizes: [
           { width: 300, height: 500 },
-          { width: 1200, crop: 'north' },
-          { width: 200, height: 200, crop: 'southeast' },
-          { width: 210, height: 210, crop: 'entropy' }
+          { width: 1200, options: { gravity: 'north' } },
+          { width: 200, height: 200, options: { gravity: 'southeast' } },
+          { width: 210, height: 210, options: { strategy: 'entropy' } }
         ]
       },
       osprey: {
@@ -139,7 +135,6 @@ describe('generate only', () => {
         600,
         undefined
       );
-      expect(sharp.croppers.get(bearBuffer)).toHaveBeenCalledTimes(0);
       expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledTimes(2);
       expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/bear-300\.png$/)
@@ -161,17 +156,15 @@ describe('generate only', () => {
         1200,
         undefined
       );
-      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(200, 200);
-      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(210, 210);
-      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledTimes(3);
-      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
-        sharp.gravity.north
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
+        200,
+        200,
+        { gravity: 'southeast' }
       );
-      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
-        sharp.gravity.southeast
-      );
-      expect(sharp.croppers.get(montarazBuffer)).toHaveBeenCalledWith(
-        sharp.strategy.entropy
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
+        210,
+        210,
+        { strategy: 'entropy' }
       );
       expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledTimes(4);
       expect(sharp.writers.get(montarazBuffer)).toHaveBeenCalledWith(
@@ -200,7 +193,6 @@ describe('generate only', () => {
         undefined
       );
       expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(300, 300);
-      expect(sharp.croppers.get(ospreyBuffer)).toHaveBeenCalledTimes(0);
       expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledTimes(2);
       expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/osprey-600\.jpg$/)
@@ -221,7 +213,6 @@ describe('generate only', () => {
         400,
         undefined
       );
-      expect(sharp.croppers.get(walrusBuffer)).toHaveBeenCalledTimes(0);
       expect(sharp.writers.get(walrusBuffer)).toHaveBeenCalledTimes(1);
       expect(sharp.writers.get(walrusBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/walrus-400\.png$/)
@@ -239,9 +230,9 @@ describe('generate only', () => {
         basename: 'montaraz.jpg',
         sizes: [
           { width: 300, height: 500 },
-          { width: 1200, crop: 'north' },
-          { width: 200, height: 200, crop: 'southeast' },
-          { width: 210, height: 210, crop: 'entropy' }
+          { width: 1200, options: { gravity: 'north' } },
+          { width: 200, height: 200, options: { gravity: 'southeast' } },
+          { width: 210, height: 210, options: { stategy: 'entropy' } }
         ]
       },
       osprey: {
@@ -362,8 +353,7 @@ describe('generate only', () => {
       }
     );
   });
-
-  test('crop value errors', () => {
+  test('crop is deprecated', () => {
     const imageConfig = {
       osprey: {
         basename: 'osprey.jpg',
@@ -377,7 +367,9 @@ describe('generate only', () => {
       },
       (error) => {
         expect(error instanceof errors.UsageError).toBe(true);
-        expect(error.message).toMatch('"foo" is not a valid crop value');
+        expect(error.message).toMatch(
+          '"crop" is deprecated, use options: https://github.com/mapbox/appropriate-images#options'
+        );
       }
     );
   });
