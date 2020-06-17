@@ -129,12 +129,10 @@ describe('generate only', () => {
       expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledTimes(2);
       expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledWith(
         300,
-        undefined,
         undefined
       );
       expect(sharp.resizers.get(bearBuffer)).toHaveBeenCalledWith(
         600,
-        undefined,
         undefined
       );
       expect(sharp.writers.get(bearBuffer)).toHaveBeenCalledTimes(2);
@@ -153,15 +151,10 @@ describe('generate only', () => {
       expect(montarazCall).toBeTruthy();
       const montarazBuffer = montarazCall[0];
       expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledTimes(4);
-      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
-        300,
-        500,
-        undefined
-      );
+      expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(300, 500);
       expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
         1200,
-        undefined,
-        { gravity: 'north' }
+        undefined
       );
       expect(sharp.resizers.get(montarazBuffer)).toHaveBeenCalledWith(
         200,
@@ -197,14 +190,9 @@ describe('generate only', () => {
       expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledTimes(2);
       expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(
         600,
-        undefined,
         undefined
       );
-      expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(
-        300,
-        300,
-        undefined
-      );
+      expect(sharp.resizers.get(ospreyBuffer)).toHaveBeenCalledWith(300, 300);
       expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledTimes(2);
       expect(sharp.writers.get(ospreyBuffer)).toHaveBeenCalledWith(
         expect.stringMatching(/osprey-600\.jpg$/)
@@ -223,7 +211,6 @@ describe('generate only', () => {
       expect(sharp.resizers.get(walrusBuffer)).toHaveBeenCalledTimes(1);
       expect(sharp.resizers.get(walrusBuffer)).toHaveBeenCalledWith(
         400,
-        undefined,
         undefined
       );
       expect(sharp.writers.get(walrusBuffer)).toHaveBeenCalledTimes(1);
