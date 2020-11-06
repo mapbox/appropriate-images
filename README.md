@@ -1,6 +1,6 @@
 # @mapbox/appropriate-images
 
-[![Build Status](https://travis-ci.org/mapbox/appropriate-images.svg?branch=main)](https://travis-ci.org/mapbox/appropriate-images)
+[![Build Status](https://travis-ci.com/mapbox/appropriate-images.svg?branch=main)](https://travis-ci.com/mapbox/appropriate-images)
 
 Generate appropriately resized and optimized images for your website, using a configuration object that can be shared with client-side libraries.
 
