@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/mapbox/appropriate-images#readme",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
     "chalk": "^4.1.0",
