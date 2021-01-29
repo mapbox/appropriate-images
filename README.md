@@ -4,7 +4,7 @@
 
 Generate appropriately resized and optimized images for your website, using a configuration object that can be shared with client-side libraries.
 
-Images are resized with [sharp](http://sharp.dimens.io/en/stable/), then each size variant is optimized (including the creation of a `webp` version) with [imagemin](https://github.com/imagemin/imagemin) plugins.
+Images are resized with [sharp](https://sharp.pixelplumbing.com/), then each size variant is optimized (including the creation of a `webp` version) with [imagemin](https://github.com/imagemin/imagemin) plugins.
 
 [@mapbox/appropriate-images-get-url] can then be used in the browser to determine which size variant of an image to render, at run time, given an [image configuration] and the available width.
 
