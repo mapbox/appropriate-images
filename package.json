@@ -1,6 +1,6 @@
 {
   "name": "@mapbox/appropriate-images",
-  "version": "4.1.0-beta.6",
+  "version": "4.1.0-beta.7",
   "description": "Get appropriately sized images into your website.",
   "main": "index.js",
   "scripts": {
