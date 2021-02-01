@@ -89,7 +89,7 @@ describe('generate', () => {
       }
     };
 
-    const options = { inputDirectory, outputDirectory, maxConcurrency: 5 };
+    const options = { inputDirectory, outputDirectory, maxConcurrency: 2 };
 
     return generate(imageConfig, options)
       .then(() => pify(fs.readdir)(outputDirectory))
