@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Add `maxConcurrency` flag to optimize multiple images with limited concurrency.
+
 # 4.0.0
 
 - Update Sharp and all dependencies.
