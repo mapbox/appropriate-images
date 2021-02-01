@@ -69,6 +69,52 @@ describe('generate', () => {
       });
   });
 
+  test('works with maxConcurrency', () => {
+    const imageConfig = {
+      bear: {
+        basename: 'bear.png',
+        sizes: [{ width: 300 }, { width: 600 }]
+      },
+      montaraz: {
+        basename: 'montaraz.jpg',
+        sizes: [{ width: 300 }, { width: 600 }]
+      },
+      osprey: {
+        basename: 'osprey.jpg',
+        sizes: [{ width: 300 }, { width: 600 }]
+      },
+      walrus: {
+        basename: 'walrus.png',
+        sizes: [{ width: 300 }, { width: 600 }]
+      }
+    };
+
+    const options = { inputDirectory, outputDirectory, maxConcurrency: 2 };
+
+    return generate(imageConfig, options)
+      .then(() => pify(fs.readdir)(outputDirectory))
+      .then((outputFiles) => {
+        expect(outputFiles).toEqual([
+          'bear-300.png',
+          'bear-300.webp',
+          'bear-600.png',
+          'bear-600.webp',
+          'montaraz-300.jpg',
+          'montaraz-300.webp',
+          'montaraz-600.jpg',
+          'montaraz-600.webp',
+          'osprey-300.jpg',
+          'osprey-300.webp',
+          'osprey-600.jpg',
+          'osprey-600.webp',
+          'walrus-300.png',
+          'walrus-300.webp',
+          'walrus-600.png',
+          'walrus-600.webp'
+        ]);
+      });
+  });
+
   test('works with specified ids', () => {
     const imageConfig = {
       bear: {
