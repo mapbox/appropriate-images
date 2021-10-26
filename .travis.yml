@@ -1,4 +1,6 @@
 language: node_js
+before_install:
+  - npm install -g npm@7
 cache:
   directories:
     - node_modules
