@@ -57,9 +57,7 @@
     "@mapbox/prettier-config-docs": "^1.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
-    "husky": "^7.0.4",
-    "jest": "^26.6.3",
-    "lint-staged": "^11.2.6"
+    "jest": "^26.6.3"
   },
   "prettier": "@mapbox/prettier-config-docs",
   "lint-staged": {
