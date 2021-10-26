@@ -2,3 +2,5 @@
 .eslintignore
 .eslintrc
 .travis.yml
+.nvmrc
+test/
