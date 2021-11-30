@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0
+
+- Update to Node 14 and npm 7.
+- Update dependencies.
+
 ## 4.1.0
 
 - Add `maxConcurrency` flag to optimize multiple images with limited concurrency.

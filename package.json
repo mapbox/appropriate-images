@@ -1,14 +1,15 @@
 {
   "name": "@mapbox/appropriate-images",
-  "version": "4.1.0",
+  "version": "5.0.0-beta.0",
   "description": "Get appropriately sized images into your website.",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --write '{,lib/**/,browser/**/,test/**/}*.js'",
+    "format": "prettier --write '*.js'",
     "lint": "eslint .",
     "test-jest": "jest",
     "pretest": "npm run lint",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -28,15 +29,16 @@
   },
   "homepage": "https://github.com/mapbox/appropriate-images#readme",
   "engines": {
-    "node": ">=10"
+    "node": ">=14",
+    "npm": "^7"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.2",
     "del": "^5.1.0",
     "fasterror": "^1.1.0",
     "imagemin": "^7.0.1",
     "imagemin-mozjpeg": "^9.0.0",
-    "imagemin-pngquant": "^9.0.1",
+    "imagemin-pngquant": "^9.0.2",
     "imagemin-webp": "^6.0.0",
     "lodash": "^4.17.20",
     "meow": "^9.0.0",
@@ -44,33 +46,25 @@
     "p-finally": "^2.0.1",
     "p-limit": "^3.1.0",
     "pify": "^5.0.0",
-    "sharp": "^0.25.4",
+    "sharp": "^0.29.3",
     "tempy": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "@mapbox/prettier-config-docs": "^0.2.1",
-    "eslint": "^7.18.0",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@mapbox/prettier-config-docs": "^1.0.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
-    "husky": "^4.3.8",
-    "jest": "^26.6.3",
-    "lint-staged": "^10.5.3",
-    "prettier": "^2.2.1"
+    "jest": "^26.6.3"
   },
   "prettier": "@mapbox/prettier-config-docs",
   "lint-staged": {
-    "**/*.js": [
+    "*.js": [
       "eslint",
       "prettier --write"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "jest": {
     "coverageReporters": [
