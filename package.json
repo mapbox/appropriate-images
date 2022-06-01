@@ -46,7 +46,7 @@
     "p-finally": "^2.0.1",
     "p-limit": "^3.1.0",
     "pify": "^5.0.0",
-    "sharp": "^0.29.3",
+    "sharp": "^0.30.5",
     "tempy": "^0.5.0"
   },
   "devDependencies": {
