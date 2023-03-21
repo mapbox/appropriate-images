@@ -1,14 +1,13 @@
+dist: jammy
 language: node_js
-before_install:
-  - npm install -g npm@7
+node_js:
+  - 18
 cache:
   directories:
     - node_modules
 env:
   - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -q update
+  - sudo apt-get -y install gcc-4.8
