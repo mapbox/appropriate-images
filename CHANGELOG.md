@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0
+
+- Update to Node 18 and npm 9.
+- Update dependencies.
+
 ## 5.0.0
 
 - Update to Node 14 and npm 7.
