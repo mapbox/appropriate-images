@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/mapbox/appropriate-images#readme",
   "engines": {
-    "node": ">=14",
-    "npm": "^7"
+    "node": ">=18",
+    "npm": ">=9"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -46,7 +46,7 @@
     "p-finally": "^2.0.1",
     "p-limit": "^3.1.0",
     "pify": "^5.0.0",
-    "sharp": "^0.30.5",
+    "sharp": "^0.32.0",
     "tempy": "^0.5.0"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "@mapbox/prettier-config-docs": "^1.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
-    "jest": "^26.6.3"
+    "jest": "^29.5.0"
   },
   "prettier": "@mapbox/prettier-config-docs",
   "lint-staged": {
