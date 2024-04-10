@@ -1,3 +1,5 @@
+## This repo is no longer active. As of April 2024, Appropriate Images has been removed from Mapbox docs infrastructure and is replaced with Docusaurus based Ideal Images which is part of [docusaurus-packages](www.github.com/mapbox/docusaurus-packages). 
+
 # @mapbox/appropriate-images
 
 [![Build Status](https://travis-ci.com/mapbox/appropriate-images.svg?branch=main)](https://travis-ci.com/mapbox/appropriate-images)
