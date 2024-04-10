@@ -1,4 +1,4 @@
-## This repo is no longer active. As of April 2024, Appropriate Images has been removed from Mapbox docs infrastructure and is replaced with Docusaurus based Ideal Images which is part of [docusaurus-packages](www.github.com/mapbox/docusaurus-packages). 
+## This repo is no longer active. As of April 2024, Appropriate Images has been removed from Mapbox docs infrastructure and is replaced with Docusaurus based Ideal Images which is part of [docusaurus-packages](https://www.github.com/mapbox/docusaurus-packages). 
 
 # @mapbox/appropriate-images
 
